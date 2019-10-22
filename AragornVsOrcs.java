@@ -52,7 +52,7 @@ public class AragornVsOrcs
                         maxOrcs = orcCasualty;
                     }
                     if(orcCasualty < minOrcs){
-                        maxOrcs = orcCasualty;
+                        minOrcs = orcCasualty;
                     }
                     break;
                 }
@@ -67,7 +67,7 @@ public class AragornVsOrcs
         int maxValue = dieArray[0];
         for(int i = 1; i < dieArray.length; i++){
             if(dieArray[i] > maxValue){
-                dieArray[1] = maxValue;
+                maxValue = dieArray[i];
             }
         }
         return maxValue;
