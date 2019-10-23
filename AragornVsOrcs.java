@@ -13,19 +13,21 @@ public class AragornVsOrcs
         int n = 5000;
         int maxOrcs = 0;
         int minOrcs = 0;
+        int nAragornDice = 3;
+        int nOrcDice = 1;
         for(int i=0; i<n; i++){
             int orcCasualty = 0;
             int aragornWounds = 3;
             boolean aragornAlive = true;
             while (aragornAlive = true){
-                int aragornDie1 = (int)(6*Math.random()+1);
-                int aragornDie2 = (int)(6*Math.random()+1);
-                int aragornDie3 = (int)(6*Math.random()+1);
-                int aragornDice[] = new int[]{aragornDie1, aragornDie2, aragornDie3};
-                int orcDie1 = (int)(6*Math.random()+1);
-                //int orcDie2 = (int)(6*Math.random()+1);
-                //int orcDie3 = (int)(6*Math.random()+1);
-                int orcDice[] = new int[]{orcDie1};//,orcDie2, orcDie3};
+                int aragornDice[] = new int[nAragornDice];
+                for( int j = 0; j<nAragornDice; j++) {
+                    aragornDice[j] = (int)(6*Math.random()+1);
+                }
+                int orcDice[] = new int[nOrcDice];
+                for( int j = 0; j<nOrcDice; j++) {
+                    orcDice[j] = (int)(6*Math.random()+1);
+                }
                 int aragornHighest = getMax(aragornDice);
                 int orcHighest = getMax(orcDice);
                 if (aragornHighest >= orcHighest){
