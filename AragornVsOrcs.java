@@ -10,7 +10,7 @@ public class AragornVsOrcs
 {
     public static void main(String[] args){
         int totalOrcsKilled = 0;
-        int n = 5000;
+        int n = 10000;
         int maxOrcs = 0;
         int minOrcs = 0;
         int nAragornDice = 3;
@@ -31,15 +31,16 @@ public class AragornVsOrcs
                 int aragornHighest = getMax(aragornDice);
                 int orcHighest = getMax(orcDice);
                 if (aragornHighest >= orcHighest){
-                    for (int j=1; j<=aragornDice.length; j++){
-                        int aragornHit = (int)(6*Math.random()+1);
+                        for( int j = 0; j<nAragornDice; j++) {
+                            aragornDice[j] = (int)(6*Math.random()+1);
+                        }
+                        int aragornHit = getMax(aragornDice);
                         if(aragornHit >= 4){
                             orcCasualty +=1;
                         }
-                    }
                 }
                 if (orcHighest > aragornHighest){
-                    for (int j=1; j<=orcDice.length; j++){
+                    for (int j=0; j<orcDice.length; j++){
                         int orcHit = (int)(6*Math.random()+1);
                         if (orcHit >= 5){
                             aragornWounds = aragornWounds - 1;
@@ -48,7 +49,7 @@ public class AragornVsOrcs
                 }
                 if(aragornWounds <= 0){
                     aragornAlive = false;
-                    System.out.println("Total Orcs Killed: " + orcCasualty);
+                    System.out.println("Orcs Killed: " + orcCasualty);
                     totalOrcsKilled = totalOrcsKilled + orcCasualty;
                     if(orcCasualty > maxOrcs){
                         maxOrcs = orcCasualty;
