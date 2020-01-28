@@ -26,16 +26,16 @@ public class ContinentMap
         int lowJ = 0;
         int highI = width;
         int highJ = height;
-        int prob = 45;
+        int prob = 48;
+        int numCheck = 95;
         for(i = 0; i < highI; i++){
                 int result = (int)(Math.random()*100+1);
-                int check = nextTo(i,j,"#");
-                map[i][j] = "A";
-                if(result > (90 - check*prob)){
-                    map[i][j] = "#";
+                int check = nextTo(j,i,"#");
+                if(result > (numCheck - check*prob)){
+                    map[j][i] = "#";
                     //System.out.println("check");
                 }else{
-                    map[i][j] = "_";
+                    map[j][i] = "_";
                     //System.out.println("check");
                 }
                 param++;
@@ -47,12 +47,12 @@ public class ContinentMap
         while(param < (width*height)){
             for(j = lowJ+1; j < highJ; j++){
                 int result = (int)(Math.random()*100+1);
-                int check = nextTo(i,j,"#");
-                if(result > (90 - check*prob)){
-                    map[i][j] = "#";
+                int check = nextTo(j,i,"#");
+                if(result > (numCheck - check*prob)){
+                    map[j][i] = "#";
                     //System.out.println("check");
                 }else{
-                    map[i][j] = "_";
+                    map[j][i] = "_";
                     //System.out.println("check");
                 }
                 param++;
@@ -63,12 +63,12 @@ public class ContinentMap
             highJ = j;
             for(i = highI-1; i > lowI; i--){
                 int result = (int)(Math.random()*100+1);
-                int check = nextTo(i,j,"#");
-                if(result > (90 - check*prob)){
-                    map[i][j] = "#";
+                int check = nextTo(j,i,"#");
+                if(result > (numCheck - check*prob)){
+                    map[j][i] = "#";
                     //System.out.println("check");
                 }else{
-                    map[i][j] = "_";
+                    map[j][i] = "_";
                     //System.out.println("check");
                 }
                 param++;
@@ -79,12 +79,12 @@ public class ContinentMap
             lowI = i;
             for(j = highJ-1; j > lowJ; j--){
                 int result = (int)(Math.random()*100+1);
-                int check = nextTo(i,j,"#");
-                if(result > (90 - check*prob)){
-                    map[i][j] = "#";
+                int check = nextTo(j,i,"#");
+                if(result > (numCheck - check*prob)){
+                    map[j][i] = "#";
                     //System.out.println("check");
                 }else{
-                    map[i][j] = "_";
+                    map[j][i] = "_";
                     //System.out.println("check");
                 }
                 param++;
@@ -95,13 +95,12 @@ public class ContinentMap
             lowJ = j;
             for(i = lowI+1; i < highI; i++){
                 int result = (int)(Math.random()*100+1);
-                int check = nextTo(i,j,"#");
-                map[i][j] = "A";
-                if(result > (90 - check*prob)){
-                    map[i][j] = "#";
+                int check = nextTo(j,i,"#");
+                if(result > (numCheck - check*prob)){
+                    map[j][i] = "#";
                     //System.out.println("check");
                 }else{
-                    map[i][j] = "_";
+                    map[j][i] = "_";
                     //System.out.println("check");
                 }
                 param++;
@@ -114,7 +113,7 @@ public class ContinentMap
     }
     private int nextTo(int x, int y, String c){
         int count = 0;
-        if((x < (mapWidth - 1))){
+        if((x < (mapHeight - 1))){
             if(map[x+1][y].equals(c)){
                 count++;
             }
@@ -122,7 +121,7 @@ public class ContinentMap
         if((x > 0)&&(map[x-1][y].equals(c))){
             count++;
         }
-        if((y < (mapHeight-1))){
+        if((y < (mapWidth-1))){
             if(map[x][y+1].equals(c)){
                 count++;
             }
