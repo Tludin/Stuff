@@ -26,16 +26,16 @@ public class ContinentMap
         int lowJ = 0;
         int highI = width;
         int highJ = height;
-        int prob = 48;
-        int numCheck = 95;
+        int prob = 55;
+        int numCheck = 99;
         for(i = 0; i < highI; i++){
                 int result = (int)(Math.random()*100+1);
-                int check = nextTo(j,i,"#");
+                int check = nextTo(j,i,"=");
                 if(result > (numCheck - check*prob)){
-                    map[j][i] = "#";
+                    map[j][i] = "=";
                     //System.out.println("check");
                 }else{
-                    map[j][i] = "_";
+                    map[j][i] = " ";
                     //System.out.println("check");
                 }
                 param++;
@@ -47,12 +47,12 @@ public class ContinentMap
         while(param < (width*height)){
             for(j = lowJ+1; j < highJ; j++){
                 int result = (int)(Math.random()*100+1);
-                int check = nextTo(j,i,"#");
+                int check = nextTo(j,i,"=");
                 if(result > (numCheck - check*prob)){
-                    map[j][i] = "#";
+                    map[j][i] = "=";
                     //System.out.println("check");
                 }else{
-                    map[j][i] = "_";
+                    map[j][i] = " ";
                     //System.out.println("check");
                 }
                 param++;
@@ -63,12 +63,12 @@ public class ContinentMap
             highJ = j;
             for(i = highI-1; i > lowI; i--){
                 int result = (int)(Math.random()*100+1);
-                int check = nextTo(j,i,"#");
+                int check = nextTo(j,i,"=");
                 if(result > (numCheck - check*prob)){
-                    map[j][i] = "#";
+                    map[j][i] = "=";
                     //System.out.println("check");
                 }else{
-                    map[j][i] = "_";
+                    map[j][i] = " ";
                     //System.out.println("check");
                 }
                 param++;
@@ -79,12 +79,12 @@ public class ContinentMap
             lowI = i;
             for(j = highJ-1; j > lowJ; j--){
                 int result = (int)(Math.random()*100+1);
-                int check = nextTo(j,i,"#");
+                int check = nextTo(j,i,"=");
                 if(result > (numCheck - check*prob)){
-                    map[j][i] = "#";
+                    map[j][i] = "=";
                     //System.out.println("check");
                 }else{
-                    map[j][i] = "_";
+                    map[j][i] = " ";
                     //System.out.println("check");
                 }
                 param++;
@@ -95,12 +95,12 @@ public class ContinentMap
             lowJ = j;
             for(i = lowI+1; i < highI; i++){
                 int result = (int)(Math.random()*100+1);
-                int check = nextTo(j,i,"#");
+                int check = nextTo(j,i,"=");
                 if(result > (numCheck - check*prob)){
-                    map[j][i] = "#";
+                    map[j][i] = "=";
                     //System.out.println("check");
                 }else{
-                    map[j][i] = "_";
+                    map[j][i] = " ";
                     //System.out.println("check");
                 }
                 param++;
@@ -138,6 +138,192 @@ public class ContinentMap
             }
             System.out.println();
         }
+    }
+    public void placeCitiesRandom(int n){
+        int randVal;
+        int check;
+        for(int i = 0; i < mapHeight; i++){
+            for(int j = 0; j < mapWidth; j++){
+                if(map[i][j].equals("=")){
+                    randVal = (int)(Math.random()*(amountLand()));
+                    check = nextTo(i,j," ");
+                    if(randVal < n + check*20){
+                        map[i][j] = "Q";
+                    }
+                }
+            }
+        }
+    }
+    private int amountLand(){
+        int count = 0;
+        for(int i = 0; i < mapHeight; i++){
+            for(int j = 0; j < mapWidth; j++){
+                if(map[i][j].equals("=")){
+                    count ++;
+                }
+            }
+        }
+        return count;
+    }
+    public void addMountains(int n){
+        int width = mapWidth;
+        int height = mapHeight;
+        int param = 0;
+        int i = 0;
+        int j = 0;
+        int lowI = -1;
+        int lowJ = 0;
+        int highI = width;
+        int highJ = height;
+        int prob = ((width*height)/21)*10;
+        int numCheck = 99;
+        for(i = 0; i < highI; i++){
+                int result = (int)(Math.random()*(width*height));
+                int check = nextTo(j,i,"∆");
+                if(map[j][i].equals("=")){
+                    if(result < n+check*prob){
+                        map[j][i] = "∆";
+                    }
+                }
+                param++;
+        }
+        i--;
+        j++;
+        highI = i;
+        while(param < (width*height)){
+            for(j = lowJ+1; j < highJ; j++){
+                int result = (int)(Math.random()*(width*height));
+                int check = nextTo(j,i,"∆");
+                if(map[j][i].equals("=")){
+                    if(result < n+check*prob){
+                        map[j][i] = "∆";
+                    }
+                }
+                param++;
+            }
+            j--;
+            i--;
+            highJ = j;
+            for(i = highI-1; i > lowI; i--){
+                int result = (int)(Math.random()*(width*height));
+                int check = nextTo(j,i,"∆");
+                if(map[j][i].equals("=")){
+                    if(result < n+check*prob){
+                        map[j][i] = "∆";
+                    }
+                }
+                param++;
+            }
+            i++;
+            j--;
+            lowI = i;
+            for(j = highJ-1; j > lowJ; j--){
+                int result = (int)(Math.random()*(width*height));
+                int check = nextTo(j,i,"∆");
+                if(map[j][i].equals("=")){
+                    if(result < n+check*prob){
+                        map[j][i] = "∆";
+                    }
+                }
+                param++;
+            }
+            j++;
+            i++;
+            lowJ = j;
+            for(i = lowI+1; i < highI; i++){
+                int result = (int)(Math.random()*(width*height));
+                int check = nextTo(j,i,"∆");
+                if(map[j][i].equals("=")){
+                    if(result < n+check*prob){
+                        map[j][i] = "∆";
+                    }
+                }
+                param++;
+            }
+            i--;
+            j++;
+            highI = i;
+        }   
+    }
+    public void addForests(int n){
+        int width = mapWidth;
+        int height = mapHeight;
+        int param = 0;
+        int i = 0;
+        int j = 0;
+        int lowI = -1;
+        int lowJ = 0;
+        int highI = width;
+        int highJ = height;
+        int prob = ((width*height)/18)*10;
+        int numCheck = 99;
+        for(i = 0; i < highI; i++){
+                int result = (int)(Math.random()*(width*height));
+                int check = nextTo(j,i,"l");
+                if(map[j][i].equals("=")){
+                    if(result < n+check*prob){
+                        map[j][i] = "l";
+                    }
+                }
+                param++;
+        }
+        i--;
+        j++;
+        highI = i;
+        while(param < (width*height)){
+            for(j = lowJ+1; j < highJ; j++){
+                int result = (int)(Math.random()*(width*height));
+                int check = nextTo(j,i,"l");
+                if(map[j][i].equals("=")){
+                    if(result < n+check*prob){
+                        map[j][i] = "l";
+                    }
+                }
+                param++;
+            }
+            j--;
+            i--;
+            highJ = j;
+            for(i = highI-1; i > lowI; i--){
+                int result = (int)(Math.random()*(width*height));
+                int check = nextTo(j,i,"l");
+                if(map[j][i].equals("=")){
+                    if(result < n+check*prob){
+                        map[j][i] = "l";
+                    }
+                }
+                param++;
+            }
+            i++;
+            j--;
+            lowI = i;
+            for(j = highJ-1; j > lowJ; j--){
+                int result = (int)(Math.random()*(width*height));
+                int check = nextTo(j,i,"l");
+                if(map[j][i].equals("=")){
+                    if(result < n+check*prob){
+                        map[j][i] = "l";
+                    }
+                }
+                param++;
+            }
+            j++;
+            i++;
+            lowJ = j;
+            for(i = lowI+1; i < highI; i++){
+                int result = (int)(Math.random()*(width*height));
+                int check = nextTo(j,i,"l");
+                if(map[j][i].equals("=")){
+                    if(result < n+check*prob){
+                        map[j][i] = "l";
+                    }
+                }
+                param++;
+            }
+            i--;
+            j++;
+            highI = i;
+        }   
     }
     /*private void test(){
         int i = 0;
