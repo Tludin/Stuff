@@ -4,7 +4,7 @@
 
 var http = require('http');
 var url = require('url');
-
+var fs = require('fs');
 
 http.createServer(function (req, res) {
     var fullUrl = req.url;
@@ -12,12 +12,28 @@ http.createServer(function (req, res) {
 
     var q = url.parse(fullUrl, true);
 
-    if(q.pathname === "/map")
+    if( q.pathname === "/map" )
     {
         res.writeHead(200, {'Content-Type': 'text/html'});
         var continent = buildMap( q.query.height, q.query.width );
         res.write(continent);
         res.end();
+    }
+    else if ( q.pathname === "/map.html" )
+    {
+        fs.readFile( "map.html", 'utf8', function( err, contents ) {
+            if ( ! err )
+            {
+                res.write( contents );
+                res.end();
+            }
+            else
+            {
+                res.writeHead(404, {'Content-Type': 'text/html'});
+                res.write( "<p>" + err + "</p>\n" );
+                res.end();
+            }
+        } );
     }
     else
     {
