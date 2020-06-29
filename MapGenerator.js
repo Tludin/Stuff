@@ -2,11 +2,18 @@
  * http://usejsdoc.org/
  */
 
-var http = require('http');
+var http = require('https');
 var url = require('url');
 var fs = require('fs');
 
-http.createServer(function (req, res) {
+const options = {
+    key: fs.readFileSync( "/home/ubuntu/src/nginx-proxy/certs/www.scrapbot.org.key" ),
+    cert: fs.readFileSync( "/home/ubuntu/src/nginx-proxy/certs/www.scrapbot.org.crt" )
+};
+
+
+
+http.createServer( options, function (req, res) {
     var fullUrl = req.url;
     console.log(fullUrl);
 
@@ -30,7 +37,7 @@ http.createServer(function (req, res) {
             else
             {
                 res.writeHead(404, {'Content-Type': 'text/html'});
-                res.write( "<p>" + err + "</p>\n" );
+                res.write( "<p>File not found</p>\n" );
                 res.end();
             }
         } );
@@ -68,6 +75,15 @@ function Map( height, width )
     this.width = width;
     this.map = [this.height];
 
+    this.symbols = {
+        default:  "X",
+        land:     "=",
+        city:     "Q",
+        mountain: "&Delta;",
+        forrest:  "l",
+        water:    " "
+    };
+        
     this.init = function()
     {
         var i = 0;
@@ -78,7 +94,7 @@ function Map( height, width )
             this.map[i] = [this.width];
             for(j = 0; j < this.width; j++)
             {
-                this.map[i][j] = "X";
+                this.map[i][j] = this.symbols.default;
             }
         }
     };
@@ -101,15 +117,15 @@ function Map( height, width )
         for(i = 0; i < highI; i++)
         {
             result = Math.floor((Math.random()*100+1));
-            check = this.nextTo( j, i, "=" );
+            check = this.nextTo( j, i, this.symbols.land );
             if(result > (numCheck - check*prob))
             {
-                this.map[i][j] = "=";
+                this.map[i][j] = this.symbols.land;
                 //console.log("Check");
             }
             else
             {
-                this.map[i][j] = " ";
+                this.map[i][j] = this.symbols.water;
                 //console.log("Check");
             }
             param++;
@@ -124,15 +140,15 @@ function Map( height, width )
             for(j = lowJ + 1; j < highJ; j++)
             {
                 result = Math.floor((Math.random()*100+1));
-                check = this.nextTo( j, i, "=" );
+                check = this.nextTo( j, i, this.symbols.land );
                 if(result > (numCheck - check*prob))
                 {
-                    this.map[i][j] = "=";
+                    this.map[i][j] = this.symbols.land;
                     //console.log("Check");
                 }
                 else
                 {
-                    this.map[i][j] = " ";
+                    this.map[i][j] = this.symbols.water;
                     //console.log("Check");
                 }
                 param++;
@@ -145,15 +161,15 @@ function Map( height, width )
             for(i = highI - 1; i > lowI; i--)
             {
                 result = Math.floor((Math.random()*100+1));
-                check = this.nextTo( j, i, "=" );
+                check = this.nextTo( j, i, this.symbols.land );
                 if(result > (numCheck - check*prob))
                 {
-                    this.map[i][j] = "=";
+                    this.map[i][j] = this.symbols.land;
                     //console.log("Check");
                 }
                 else
                 {
-                    this.map[i][j] = " ";
+                    this.map[i][j] = this.symbols.water;
                     //console.log("Check");
                 }
                 param++;
@@ -166,15 +182,15 @@ function Map( height, width )
             for(j = highJ - 1; j > lowJ; j--)
             {
                 result = Math.floor((Math.random()*100+1));
-                check = this.nextTo( j, i, "=" );
+                check = this.nextTo( j, i, this.symbols.land );
                 if(result > (numCheck - check*prob))
                 {
-                    this.map[i][j] = "=";
+                    this.map[i][j] = this.symbols.land;
                     //console.log("Check");
                 }
                 else
                 {
-                    this.map[i][j] = " ";
+                    this.map[i][j] = this.symbols.water;
                     //console.log("Check");
                 }
                 param++;
@@ -187,15 +203,15 @@ function Map( height, width )
             for(i = lowI + 1; i < highI; i++)
             {
                 result = Math.floor((Math.random()*100+1));
-                check = this.nextTo( j, i, "=" );
+                check = this.nextTo( j, i, this.symbols.land );
                 if(result > (numCheck - check*prob))
                 {
-                    this.map[i][j] = "=";
+                    this.map[i][j] = this.symbols.land;
                     //console.log("Check");
                 }
                 else
                 {
-                    this.map[i][j] = " ";
+                    this.map[i][j] = this.symbols.water;
                     //console.log("Check");
                 }
                 param++;
@@ -212,7 +228,7 @@ function Map( height, width )
         {
             for(var j = 0; j < this.width; j++)
             {
-                if(this.map[i][j] === ("=")){
+                if(this.map[i][j] === (this.symbols.land)){
                     count ++;
                 }
             }
@@ -229,13 +245,13 @@ function Map( height, width )
         {
             for(var j = 0; j < this.width; j++)
             {
-                if(this.map[i][j] === ("="))
+                if(this.map[i][j] === (this.symbols.land))
                 {
                     randVal = Math.floor((Math.random()*(this.countLand(this.map, this.height, this.width))));
-                    check = this.nextTo( j, i, " " );
+                    check = this.nextTo( j, i, this.symbols.water );
                     if(randVal < n + check*20)
                     {
-                        this.map[i][j] = "Q";
+                        this.map[i][j] = this.symbols.city;
                     }
                 }
             }
@@ -259,10 +275,10 @@ function Map( height, width )
         for(i = 0; i < highI; i++)
         {
             result = Math.floor((Math.random()*(this.width*this.height)));
-            check = this.nextTo( j, i, "M" );
-            if(this.map[i][j] === ("=")){
+            check = this.nextTo( j, i, this.symbols.mountain );
+            if(this.map[i][j] === (this.symbols.land)){
                 if(result < n+check*prob){
-                    this.map[i][j] = "M";
+                    this.map[i][j] = this.symbols.mountain;
                 }
             }
             param++;
@@ -277,10 +293,10 @@ function Map( height, width )
             for(j = lowJ + 1; j < highJ; j++)
             {
                 result = Math.floor((Math.random()*(this.width*this.height)));
-                check = this.nextTo( j, i, "M" );
-                if(this.map[i][j] === ("=")){
+                check = this.nextTo( j, i, this.symbols.mountain );
+                if(this.map[i][j] === (this.symbols.land)){
                     if(result < n+check*prob){
-                        this.map[i][j] = "M";
+                        this.map[i][j] = this.symbols.mountain;
                     }
                 }
                 param++;
@@ -293,10 +309,10 @@ function Map( height, width )
             for(i = highI - 1; i > lowI; i--)
             {
                 result = Math.floor((Math.random()*(this.width*this.height)));
-                check = this.nextTo( j, i, "M" );
-                if(this.map[i][j] === ("=")){
+                check = this.nextTo( j, i, this.symbols.mountain );
+                if(this.map[i][j] === (this.symbols.land)){
                     if(result < n+check*prob){
-                        this.map[i][j] = "M";
+                        this.map[i][j] = this.symbols.mountain;
                     }
                 }
                 param++;
@@ -309,10 +325,10 @@ function Map( height, width )
             for(j = highJ - 1; j > lowJ; j--)
             {
                 result = Math.floor((Math.random()*(this.width*this.height)));
-                check = this.nextTo( j, i, "M" );
-                if(this.map[i][j] === ("=")){
+                check = this.nextTo( j, i, this.symbols.mountain );
+                if(this.map[i][j] === (this.symbols.land)){
                     if(result < n+check*prob){
-                        this.map[i][j] = "M";
+                        this.map[i][j] = this.symbols.mountain;
                     }
                 }
                 param++;
@@ -325,10 +341,10 @@ function Map( height, width )
             for(i = lowI + 1; i < highI; i++)
             {
                 result = Math.floor((Math.random()*(this.width*this.height)));
-                check = this.nextTo( j, i, "M" );
-                if(this.map[i][j] === ("=")){
+                check = this.nextTo( j, i, this.symbols.mountain );
+                if(this.map[i][j] === (this.symbols.land)){
                     if(result < n+check*prob){
-                        this.map[i][j] = "M";
+                        this.map[i][j] = this.symbols.mountain;
                     }
                 }
                 param++;
@@ -355,10 +371,10 @@ function Map( height, width )
         for(i = 0; i < highI; i++)
         {
             result = Math.floor((Math.random()*(this.width*this.height)));
-            check = this.nextTo( j, i, "l" );
-            if(this.map[i][j] === ("=")){
+            check = this.nextTo( j, i, this.symbols.forrest );
+            if(this.map[i][j] === (this.symbols.land)){
                 if(result < n+check*prob){
-                    this.map[i][j] = "l";
+                    this.map[i][j] = this.symbols.forrest;
                 }
             }
             param++;
@@ -373,10 +389,10 @@ function Map( height, width )
             for(j = lowJ + 1; j < highJ; j++)
             {
                 result = Math.floor((Math.random()*(this.width*this.height)));
-                check = this.nextTo( j, i, "l" );
-                if(this.map[i][j] === ("=")){
+                check = this.nextTo( j, i, this.symbols.forrest );
+                if(this.map[i][j] === (this.symbols.land)){
                     if(result < n+check*prob){
-                        this.map[i][j] = "l";
+                        this.map[i][j] = this.symbols.forrest;
                     }
                 }
                 param++;
@@ -389,10 +405,10 @@ function Map( height, width )
             for(i = highI - 1; i > lowI; i--)
             {
                 result = Math.floor((Math.random()*(this.width*this.height)));
-                check = this.nextTo( j, i, "l" );
-                if(this.map[i][j] === ("=")){
+                check = this.nextTo( j, i, this.symbols.forrest );
+                if(this.map[i][j] === (this.symbols.land)){
                     if(result < n+check*prob){
-                        this.map[i][j] = "l";
+                        this.map[i][j] = this.symbols.forrest;
                     }
                 }
                 param++;
@@ -405,10 +421,10 @@ function Map( height, width )
             for(j = highJ - 1; j > lowJ; j--)
             {
                 result = Math.floor((Math.random()*(this.width*this.height)));
-                check = this.nextTo( j, i, "l" );
-                if(this.map[i][j] === ("=")){
+                check = this.nextTo( j, i, this.symbols.forrest );
+                if(this.map[i][j] === (this.symbols.land)){
                     if(result < n+check*prob){
-                        this.map[i][j] = "l";
+                        this.map[i][j] = this.symbols.forrest;
                     }
                 }
                 param++;
@@ -421,10 +437,10 @@ function Map( height, width )
             for(i = lowI + 1; i < highI; i++)
             {
                 result = Math.floor((Math.random()*(this.width*this.height)));
-                check = this.nextTo( j, i, "l" );
-                if(this.map[i][j] === ("=")){
+                check = this.nextTo( j, i, this.symbols.forrest );
+                if(this.map[i][j] === (this.symbols.land)){
                     if(result < n+check*prob){
-                        this.map[i][j] = "l";
+                        this.map[i][j] = this.symbols.forrest;
                     }
                 }
                 param++;
