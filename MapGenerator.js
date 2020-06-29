@@ -47,7 +47,10 @@ function buildMap()
 	}
 	
 	buildContinent();
-	buildMountains(250);
+	raiseMountains(250);
+	plantForests(250);
+	buildCities(25);
+	
 	var mapString = "";
 	for(i = 0; i < mapHeight; i++)
 	{
@@ -187,27 +190,65 @@ function buildContinent()
 }
 
 
-function buildMountains(n)
+function countLand()
 {
-	console.log('Adding Mountains');
+	var count = 0;
+    for(var i = 0; i < mapHeight; i++)
+    {
+        for(var j = 0; j < mapWidth; j++)
+        {
+            if(map[i][j] === ("=")){
+                count ++;
+            }
+        }
+    }
+    return count;
+}
+
+function buildCities(n)
+{
+	console.log("The Cities Have Been Built");
+	var randVal;
+    var check;
+    for(var i = 0; i < mapHeight; i++)
+    {
+        for(var j = 0; j < mapWidth; j++)
+        {
+            if(map[i][j] === ("="))
+            {
+                randVal = Math.floor((Math.random()*(countLand())));
+                check = nextTo(j,i," ");
+                if(randVal < n + check*20)
+                {
+                    map[i][j] = "Q";
+                }
+            }
+        }
+    }
+    
+}
+
+function raiseMountains(n)
+{
+	console.log('The Mountains Have Been Raised');
 	var i = 0;
 	var j = 0;
 	var lowI = -1;
 	var lowJ = 0;
 	var highI = mapHeight;
 	var highJ = mapWidth;
-	var prob = 55;
+	var prob = ((mapWidth*mapHeight)/21)*10;
 	var param = 0;
 	var check = 0;
 	var result = 0;
 	//console.log("Check");
 	for(i = 0; i < highI; i++)
 	{
-		 result = Math.floor((Math.random()*100+1));
-		 check = nextTo(j,i,"∆");
-         if(map[i][j].equals("=")){
+		 result = Math.floor((Math.random()*(mapWidth*mapHeight)));
+		 check = nextTo(j,i,"M");
+         if(map[i][j] === ("=")){
              if(result < n+check*prob){
-                 map[i][j] = "∆";
+                 map[i][j] = "M";
              }
          }
          param++;
@@ -221,11 +262,11 @@ function buildMountains(n)
 	{
 		for(j = lowJ + 1; j < highJ; j++)
 		{
-			 result = Math.floor((Math.random()*100+1));
-			 check = nextTo(j,i,"∆");
-	         if(map[i][j].equals("=")){
+			 result = Math.floor((Math.random()*(mapWidth*mapHeight)));
+			 check = nextTo(j,i,"M");
+	         if(map[i][j] === ("=")){
 	             if(result < n+check*prob){
-	                 map[i][j] = "∆";
+	                 map[i][j] = "M";
 	             }
 	         }
 	         param++;
@@ -237,11 +278,11 @@ function buildMountains(n)
 	    
 	    for(i = highI - 1; i > lowI; i--)
 		{
-	    	 result = Math.floor((Math.random()*100+1));
-	    	 check = nextTo(j,i,"∆");
-	         if(map[i][j].equals("=")){
+	    	 result = Math.floor((Math.random()*(mapWidth*mapHeight)));
+	    	 check = nextTo(j,i,"M");
+	         if(map[i][j] === ("=")){
 	             if(result < n+check*prob){
-	                 map[i][j] = "∆";
+	                 map[i][j] = "M";
 	             }
 	         }
 	         param++;
@@ -253,11 +294,11 @@ function buildMountains(n)
 	    
 	    for(j = highJ - 1; j > lowJ; j--)
 		{
-	    	 result = Math.floor((Math.random()*100+1));
-	    	 check = nextTo(j,i,"∆");
-	         if(map[i][j].equals("=")){
+	    	 result = Math.floor((Math.random()*(mapWidth*mapHeight)));
+	    	 check = nextTo(j,i,"M");
+	         if(map[i][j] === ("=")){
 	             if(result < n+check*prob){
-	                 map[i][j] = "∆";
+	                 map[i][j] = "M";
 	             }
 	         }
 	         param++;
@@ -269,11 +310,11 @@ function buildMountains(n)
 	    
 	    for(i = lowI + 1; i < highI; i++)
 		{
-	    	 result = Math.floor((Math.random()*100+1));
-	    	 check = nextTo(j,i,"∆");
-	         if(map[i][j].equals("=")){
+	    	 result = Math.floor((Math.random()*(mapWidth*mapHeight)));
+	    	 check = nextTo(j,i,"M");
+	         if(map[i][j] === ("=")){
 	             if(result < n+check*prob){
-	                 map[i][j] = "∆";
+	                 map[i][j] = "M";
 	             }
 	         }
 	         param++;
@@ -285,10 +326,101 @@ function buildMountains(n)
 }
 
 
-function buildMountains()
+
+function plantForests(n)
 {
 	
+	console.log('The Forests Have Been Planted');
+	var i = 0;
+	var j = 0;
+	var lowI = -1;
+	var lowJ = 0;
+	var highI = mapHeight;
+	var highJ = mapWidth;
+	var prob = ((mapWidth*mapHeight)/18)*10;
+	var param = 0;
+	var check = 0;
+	var result = 0;
+	for(i = 0; i < highI; i++)
+	{
+		 result = Math.floor((Math.random()*(mapWidth*mapHeight)));
+		 check = nextTo(j,i,"l");
+         if(map[i][j] === ("=")){
+             if(result < n+check*prob){
+                 map[i][j] = "l";
+             }
+         }
+         param++;
+	}
 	
+	i--;
+    highI = i;
+    
+    
+	while(param < mapWidth*mapHeight)
+	{
+		for(j = lowJ + 1; j < highJ; j++)
+		{
+			 result = Math.floor((Math.random()*(mapWidth*mapHeight)));
+			 check = nextTo(j,i,"l");
+	         if(map[i][j] === ("=")){
+	             if(result < n+check*prob){
+	                 map[i][j] = "l";
+	             }
+	         }
+	         param++;
+		}
+		
+		j--;
+	    highJ = j;
+	    
+	    
+	    for(i = highI - 1; i > lowI; i--)
+		{
+	    	 result = Math.floor((Math.random()*(mapWidth*mapHeight)));
+	    	 check = nextTo(j,i,"l");
+	         if(map[i][j] === ("=")){
+	             if(result < n+check*prob){
+	                 map[i][j] = "l";
+	             }
+	         }
+	         param++;
+		}
+	    
+	    i++;
+	    lowI = i;
+	    
+	    
+	    for(j = highJ - 1; j > lowJ; j--)
+		{
+	    	 result = Math.floor((Math.random()*(mapWidth*mapHeight)));
+	    	 check = nextTo(j,i,"l");
+	         if(map[i][j] === ("=")){
+	             if(result < n+check*prob){
+	                 map[i][j] = "l";
+	             }
+	         }
+	         param++;
+		}
+	    
+	    j++;
+	    lowJ = j;
+	    
+	    
+	    for(i = lowI + 1; i < highI; i++)
+		{
+	    	 result = Math.floor((Math.random()*(mapWidth*mapHeight)));
+	    	 check = nextTo(j,i,"l");
+	         if(map[i][j] === ("=")){
+	             if(result < n+check*prob){
+	                 map[i][j] = "l";
+	             }
+	         }
+	         param++;
+		}
+		i--;
+	    highI = i;
+	}
 	
 }
 
