@@ -1,3 +1,4 @@
+
 /**
  * Aragorn is fighting Morannon orcs at the Black Gate.
  * He can fight any number of orcs at a time, just cahnge the numbers, right now he will fight one at a time.
@@ -59,50 +60,19 @@ public class AragornVsOrcs
                     break;
                 }
             }
-          }
         }
-        
-        if (orcHighest > aragornHighest){
-          for (int j=1; j<=orcDice.length; j++){
-            int orcHit = (int)(6*Math.random()+1);
-
-            if (orcHit >= 5) {
-              aragornWounds--;
+        int orcAverage = totalOrcsKilled/n;
+        System.out.println("Average number of orcs killed: " + orcAverage);
+        System.out.println("Maximum number of orcs killed: " + maxOrcs);
+        System.out.println("Minimum number of orcs killed: " + minOrcs);
+    }
+    public static int getMax(int[] dieArray){
+        int maxValue = dieArray[0];
+        for(int i = 1; i < dieArray.length; i++){
+            if(dieArray[i] > maxValue){
+                maxValue = dieArray[i];
             }
-          }
         }
-        
-        if(aragornWounds <= 0){
-          aragornAlive = false;
-          // System.out.println("Total Orcs Killed: " + orcCasualty);
-          totalOrcsKilled = totalOrcsKilled + orcCasualty;
-          if(orcCasualty > maxOrcs){
-            maxOrcs = orcCasualty;
-          }
-
-          if(orcCasualty < minOrcs){
-            minOrcs = orcCasualty;
-          }
-        }
-      }
+        return maxValue;
     }
-    
-    int orcAverage = totalOrcsKilled / n;
-
-    System.out.println("Average number of orcs killed: " + orcAverage);
-    System.out.println("Maximum number of orcs killed: " + maxOrcs);
-    System.out.println("Minimum number of orcs killed: " + minOrcs);
-  }
-
-
-  public static int getMax(int[] dieArray){
-    int maxValue = dieArray[0];
-
-    for(int val : dieArray )
-    {
-      maxValue = (val > maxValue ? val : maxValue);
-    }
-
-    return maxValue;
-  }
 }
